@@ -3,7 +3,128 @@ import firebase from "firebase";
 import firebaseConfig from "../firebase";
 
 export class Cart extends Component {
+  constructor(props) {
+    super(props);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    this.state = {
+      listCart: [],
+      productCart: [],
+      totalprice: 0,
+      loadingcart: true,
+      loadinganim: "",
+    };
+  }
+  cartItem = (product, cart) => {
+    let newCart = {
+      ...product,
+      ...cart,
+    };
+    return newCart;
+  };
+  fetchCart = () => {
+    const cartref = firebase.database().ref(`/carts/enggarrahayu64@gmail`);
 
+    const productref = firebase.database().ref("/products");
+    cartref.on("value", (snapshot) => {
+      let carts = snapshot.val();
+      if (carts !== null) {
+        this.setState({ listCart: carts });
+      }
+      productref.on("value", (productSnapshot) => {
+        console.log(productSnapshot);
+        let products = productSnapshot.val();
+        let newproductcart = [];
+        if (products != null && carts != null) {
+          let total = 0;
+          products.map((item) => {
+            carts.products.map((cart) => {
+              if (item.id === cart.id) {
+                newproductcart.push(this.cartItem(item, cart));
+                this.setState({
+                  productCart: newproductcart,
+                  loadingcart: false,
+                });
+                total += item.price * cart.qty;
+              }
+            });
+          });
+          this.countTotalPrice(total);
+        } else {
+          this.setState({ productCart: [], totalprice: 0, loadingcart: false });
+        }
+        this.getImage();
+      });
+    });
+  };
+  componentDidMount() {
+    this.fetchCart();
+    this.loadanim();
+  }
+  countTotalPrice = (price) => {
+    this.setState({ totalprice: price });
+  };
+  deleteCart = (productid) => {
+    let newCarts = this.state.listCart.products.filter((item) => {
+      return item.id !== productid;
+    });
+    console.log(this.state.productCart);
+    firebase
+      .database()
+      .ref("/carts/enggarrahayu64@gmail/products")
+      .set(newCarts);
+  };
+  getImage = () => {
+    const storage = firebase.storage();
+    this.state.productCart.map((item) => {
+      storage
+        .ref(`/images/${item.img}`)
+        .getDownloadURL()
+        .then((link) => {
+          let newCart = this.state.productCart.map((cart) => {
+            if (item.id === cart.id) {
+              cart.img = link;
+            }
+            return cart;
+          });
+          this.setState({ productCart: newCart });
+        });
+    });
+  };
+  setQty = (id, qty) => {
+    let ref = firebase.database().ref(`/carts/enggarrahayu64@gmail/products`);
+    ref.get().then((snapshot) => {
+      let carts = snapshot.val();
+      if (qty > 0) {
+        let index = carts.findIndex((element) => {
+          return element.id === id;
+        });
+        if (index > -1 && index < carts.length) {
+          carts[index].qty = qty;
+          ref.set(carts);
+        }
+      }
+    });
+  };
+  loadanim = () => {
+    let inter = {};
+    if (this.state.loadingcart) {
+      let load = "";
+      inter = setInterval(() => {
+        if (load.length < 3) {
+          load += ".";
+        } else {
+          load = "";
+        }
+        this.setState({ loadinganim: load });
+      }, 500);
+    } else {
+      if (inter) {
+        clearInterval(inter);
+      }
+    }
+  };
   render() {
     return (
       <div>
@@ -40,137 +161,63 @@ export class Cart extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="thumbnail-img">
-                          <a href="#">
-                            <img
-                              className="img-fluid"
-                              src="images/img-pro-01.jpg"
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name-pr">
-                          <a href="#">Lorem ipsum dolor sit amet</a>
-                        </td>
-                        <td className="price-pr">
-                          <p>$ 80.0</p>
-                        </td>
-                        <td className="quantity-box">
-                          <input
-                            type="number"
-                            size={4}
-                            defaultValue={1}
-                            min={0}
-                            step={1}
-                            className="c-input-text qty text"
-                          />
-                        </td>
-                        <td className="total-pr">
-                          <p>$ 80.0</p>
-                        </td>
-                        <td className="remove-pr">
-                          <a href="#">
-                            <i className="fas fa-times" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="thumbnail-img">
-                          <a href="#">
-                            <img
-                              className="img-fluid"
-                              src="images/img-pro-02.jpg"
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name-pr">
-                          <a href="#">Lorem ipsum dolor sit amet</a>
-                        </td>
-                        <td className="price-pr">
-                          <p>$ 60.0</p>
-                        </td>
-                        <td className="quantity-box">
-                          <input
-                            type="number"
-                            size={4}
-                            defaultValue={1}
-                            min={0}
-                            step={1}
-                            className="c-input-text qty text"
-                          />
-                        </td>
-                        <td className="total-pr">
-                          <p>$ 80.0</p>
-                        </td>
-                        <td className="remove-pr">
-                          <a href="#">
-                            <i className="fas fa-times" />
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="thumbnail-img">
-                          <a href="#">
-                            <img
-                              className="img-fluid"
-                              src="images/img-pro-03.jpg"
-                              alt=""
-                            />
-                          </a>
-                        </td>
-                        <td className="name-pr">
-                          <a href="#">Lorem ipsum dolor sit amet</a>
-                        </td>
-                        <td className="price-pr">
-                          <p>$ 30.0</p>
-                        </td>
-                        <td className="quantity-box">
-                          <input
-                            type="number"
-                            size={4}
-                            defaultValue={1}
-                            min={0}
-                            step={1}
-                            className="c-input-text qty text"
-                          />
-                        </td>
-                        <td className="total-pr">
-                          <p>$ 80.0</p>
-                        </td>
-                        <td className="remove-pr">
-                          <a href="#">
-                            <i className="fas fa-times" />
-                          </a>
-                        </td>
-                      </tr>
+                      {this.state.loadingcart && (
+                        <tr className="text-center">
+                          <td colSpan="6">
+                            <h6>Please Wait {this.state.loadinganim}</h6>
+                          </td>
+                        </tr>
+                      )}
+
+                      {!this.state.loadingcart &&
+                        this.state.productCart.length == 0 && (
+                          <tr className="text-center">
+                            <td colSpan="6">
+                              <h4>Your Cart is Empty</h4>
+                            </td>
+                          </tr>
+                        )}
+                      {this.state.productCart.map((item) => {
+                        return (
+                          <tr>
+                            <td className="thumbnail-img">
+                              <a href="#">
+                                <img
+                                  className="img-fluid"
+                                  src={item.img}
+                                  alt=""
+                                />
+                              </a>
+                            </td>
+                            <td className="name-pr">
+                              <a href="#">{item.name}</a>
+                            </td>
+                            <td className="price-pr">
+                              <p>Rp. {item.price}</p>
+                            </td>
+                            <td className="quantity-box">
+                              <input
+                                type="number"
+                                size={4}
+                                defaultValue={1}
+                                min={0}
+                                step={1}
+                                className="c-input-text qty text"
+                              />
+                            </td>
+                            <td className="total-pr">
+                              <p>$ 80.0</p>
+                            </td>
+                            <td className="remove-pr">
+                              <a href="#">
+                                <i className="fas fa-times" />
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
-                </div>
-              </div>
-            </div>
-            <div className="row my-5">
-              <div className="col-lg-6 col-sm-6">
-                <div className="coupon-box">
-                  <div className="input-group input-group-sm">
-                    <input
-                      className="form-control"
-                      placeholder="Enter your coupon code"
-                      aria-label="Coupon code"
-                      type="text"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-theme" type="button">
-                        Apply Coupon
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-6 col-sm-6">
-                <div className="update-box">
-                  <input defaultValue="Update Cart" type="submit" />
                 </div>
               </div>
             </div>

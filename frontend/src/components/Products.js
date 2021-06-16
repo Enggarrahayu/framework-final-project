@@ -85,83 +85,38 @@ export class Products extends Component {
       });
     }
   };
+
+  onClickAddCart = (id) => {
+    let cart = {
+      id: id,
+      qty: 1
+    };
+    let ref = firebase.database().ref(`/carts/enggarrahayu64@gmail/products`);
+    ref.get().then(snapshot=>{
+      let products= snapshot.val()
+      if(products === null){
+        let newCart = []
+        newCart.push(cart)
+        ref.set(newCart).then(val=>alert('Added to Cart'))
+      }else if(products.length > 0){
+        let index = products.findIndex(element=>{
+          return element.id === id
+        })
+        if(index>-1 && index<products.length){
+          products[index].qty +=1
+          ref.set(products).then(val=>alert('Added to Cart'))
+        }else{
+          products.push(cart)
+          ref.set(products).then(val=>alert('Added to Cart'))
+        }
+      }
+    })
+  };
+  
   render() {
     const { locallist, listproduct } = this.state;
     return (
       <div>
-        {/* <div className="categories-shop">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/t-shirts-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    T-shirts
-                  </a>
-                </div>
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/shirt-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    Shirt
-                  </a>
-                </div>
-              </div>
-              <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/wallet-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    Wallet
-                  </a>
-                </div>
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/women-bag-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    Bags
-                  </a>
-                </div>
-              </div>
-              <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/shoes-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    Shoes
-                  </a>
-                </div>
-                <div className="shop-cat-box">
-                  <img
-                    className="img-fluid"
-                    src="images/women-shoes-img.jpg"
-                    alt=""
-                  />
-                  <a className="btn hvr-hover" href="#">
-                    Women Shoes
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
         <div className="products-box">
           <div className="container">
             <div className="row">
@@ -220,7 +175,7 @@ export class Products extends Component {
                                   </a>
                                 </li>
                               </ul>
-                              <a className="cart" href="#">
+                              <a className="cart" onClick={() => this.onClickAddCart(data.id)}>
                                 Add to Cart
                               </a>
                             </div>
