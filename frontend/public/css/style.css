@@ -1863,6 +1863,13 @@
      border: 2px solid #010101;
      text-align: center;
 }
+
+.button.plus {
+	right: 0;
+	border-radius:0;
+	overflow:hidden;
+}
+
  .quantity-box input:focus{
      border-color: #d33b33;
 }
@@ -2329,7 +2336,7 @@
      color: #ffffff;
 }
  .quantity-box input{
-     width: 100%;
+     width: 60%;
 }
  .price-box-bar{
      margin-bottom: 30px;

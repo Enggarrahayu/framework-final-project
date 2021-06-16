@@ -112,7 +112,7 @@ export class Products extends Component {
       }
     })
   };
-  
+
   render() {
     const { locallist, listproduct } = this.state;
     return (
