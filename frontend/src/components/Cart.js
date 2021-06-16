@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import firebaseConfig from "../firebase";
 
-export class Cart extends Component {
+class Cart extends Component {
   constructor(props) {
     super(props);
     if (!firebase.apps.length) {
@@ -198,7 +198,14 @@ export class Cart extends Component {
                             <td className="quantity-box">
                               <button
                                 type="button"
-                                // className="btn btn-primary btn-number"
+                                className="ml-auto btn hvr-hover"
+                                style={{
+                                  margin: "auto",
+                                  color: "white",
+                                  background: "#56575c",
+                                  height: "35px",
+                                  width: "38px"
+                                }}
                                 data-type="minus"
                                 data-field="quant[1]"
                                 onClick={() => this.setQty(item.id, --item.qty)}
@@ -216,7 +223,14 @@ export class Cart extends Component {
 
                               <button
                                 type="button"
-                                // className="btn btn-primary btn-number"
+                                className="ml-auto btn hvr-hover"
+                                style={{
+                                  margin: "auto",
+                                  color: "white",
+                                  background: "#56575c",
+                                  height: "35px",
+                                  width: "38px"
+                                }}
                                 data-type="plus"
                                 data-field="quant[1]"
                                 onClick={() => this.setQty(item.id, ++item.qty)}
