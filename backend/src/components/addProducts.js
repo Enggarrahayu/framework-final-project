@@ -15,8 +15,8 @@ class AddProducts extends Component {
     this.state = {
       listproduct: [],
       productprep: null,
-      img: null,
-      status: null,
+      image: null,
+      imageref: null,
     };
   }
   fetchProduct = () => {
@@ -39,12 +39,6 @@ class AddProducts extends Component {
         .put(this.state.imageref);
     }
   };
-
-  handleUploadError = (val) => {
-    this.setState({
-      status: `File ${val} gagal di upload`
-    })
-  }
 
   componentDidMount() {
     this.fetchProduct();
@@ -192,7 +186,6 @@ class AddProducts extends Component {
                             <input
                               type="file"
                               className="custom-file-input"
-                              id="feFirstName"
                               accept="image/*"
                               onChange={this.onImageChange}
                             />
