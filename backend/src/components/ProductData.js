@@ -49,9 +49,11 @@ export class ProductData extends Component {
       .set(this.state.listproduct)
   }
   deleteProduct = (index) => {
-    firebase.database()
-      .ref(`/products/${index}`)
-      .remove()
+    
+    console.log(this.state.listproduct)
+    // firebase.database()
+    //   .ref(`/products/${index}`)
+    //   .remove()
   }
   deleteImage = (id) => {
     let filename = ""
@@ -71,15 +73,14 @@ export class ProductData extends Component {
   }
 
   handleDelete = (id) =>{
-    console.log(this.state.listproduct)
     const ref = firebase.database().ref('/products')
     const {listproduct} = this.state
     const newlist = listproduct.filter(data => {
       return data.id !== id
     })
+    this.setState({listproduct: newlist})
     this.deleteProduct(listproduct.findIndex(prod => prod.id === id))
     this.deleteImage(id)
-    this.setState({listproduct: newlist})
   }
   getimage = () => {
     const storage = firebase.storage()
