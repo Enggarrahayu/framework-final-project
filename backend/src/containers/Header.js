@@ -21,12 +21,7 @@ export class Header extends Component {
           </div>
           <div className="sidebar-wrapper">
             <ul className="nav">
-              <li className="nav-item active  ">
-                <a className="nav-link" href="./dashboard.html">
-                  <i className="material-icons">dashboard</i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
+              
               <li className="nav-item ">
                 <a className="nav-link" href="/addproducts">
                   <i className="material-icons">person</i>
@@ -34,21 +29,9 @@ export class Header extends Component {
                 </a>
               </li>
               <li className="nav-item ">
-                <a className="nav-link" href="/userdata">
+                <a className="nav-link" href="/productdata">
                   <i className="material-icons">content_paste</i>
                   <p>Product List</p>
-                </a>
-              </li>
-              <li className="nav-item ">
-                <a className="nav-link" href="./typography.html">
-                  <i className="material-icons">library_books</i>
-                  <p>Typography</p>
-                </a>
-              </li>
-              <li className="nav-item ">
-                <a className="nav-link" href="./icons.html">
-                  <i className="material-icons">bubble_chart</i>
-                  <p>Icons</p>
                 </a>
               </li>
               <li className="nav-item ">
@@ -57,12 +40,7 @@ export class Header extends Component {
                   <p>Maps</p>
                 </a>
               </li>
-              <li className="nav-item ">
-                <a className="nav-link" href="./notifications.html">
-                  <i className="material-icons">notifications</i>
-                  <p>Notifications</p>
-                </a>
-              </li>
+              
               {/* <li class="nav-item active-pro ">
                       <a class="nav-link" href="./upgrade.html">
                           <i class="material-icons">unarchive</i>

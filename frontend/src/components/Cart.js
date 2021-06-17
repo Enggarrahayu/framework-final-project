@@ -202,7 +202,7 @@ class Cart extends Component {
                                 style={{
                                   margin: "auto",
                                   color: "white",
-                                  background: "#56575c",
+                                  background: "#8c8d8d",
                                   height: "35px",
                                   width: "38px"
                                 }}
@@ -227,7 +227,7 @@ class Cart extends Component {
                                 style={{
                                   margin: "auto",
                                   color: "white",
-                                  background: "#56575c",
+                                  background: "#8c8d8d",
                                   height: "35px",
                                   width: "38px"
                                 }}

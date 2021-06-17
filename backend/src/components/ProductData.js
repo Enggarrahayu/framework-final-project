@@ -49,9 +49,11 @@ export class ProductData extends Component {
       .set(this.state.listproduct)
   }
   deleteProduct = (index) => {
-    firebase.database()
-      .ref(`/products/${index}`)
-      .remove()
+    
+    console.log(this.state.listproduct)
+    // firebase.database()
+    //   .ref(`/products/${index}`)
+    //   .remove()
   }
   deleteImage = (id) => {
     let filename = ""
@@ -61,7 +63,7 @@ export class ProductData extends Component {
         filename = data.img
       }
     })
-    firebase.storage().ref("images").child(filename)
+    firebase.storage().ref("/images").child(filename)
       .delete().catch(error => {
         console.log(error)
       })
@@ -69,6 +71,7 @@ export class ProductData extends Component {
   componentDidMount(){
     this.fetchProduct()
   }
+
   handleDelete = (id) =>{
     const ref = firebase.database().ref('/products')
     const {listproduct} = this.state
@@ -81,7 +84,7 @@ export class ProductData extends Component {
   }
   getimage = () => {
     const storage = firebase.storage()
-    if(this.state.listproduct !== null){
+    if (this.state.listproduct !== null){
       this.state.listproduct.map(data=> {
         storage.ref(`/images/${data.img}`).getDownloadURL()
         .then(link => {
@@ -120,9 +123,9 @@ export class ProductData extends Component {
                           <thead className=" text-primary">
                             <tr>
                               <th>ID</th>
+                              <th>Image</th>
                               <th>Product Name</th>
                               <th>Price</th>
-                              <th>Image</th>
                               <th>Stock</th>
                               <th>Actions</th>
                             </tr>
@@ -132,11 +135,11 @@ export class ProductData extends Component {
                             return(
                             <tr key={data.id}>
                               <td>{data.id}</td>
+                              <td><img src={data.img}  width='100' height = '100'/></td>
                               <td>{data.name}</td>
                               <td> {data.price}</td>
-                              <td><img src={data.img}  width='100' height = '100'/></td>
                               <td>{data.stock}</td>
-                              <td style={{textAlign: 'center'}} class="td-actions text-right">
+                              <td style={{textAlign: 'center'}} className="td-actions text-right">
                                 <button
                                   type="button"
                                   rel="tooltip"
@@ -145,14 +148,16 @@ export class ProductData extends Component {
                                 >
                                   <i className="material-icons">edit</i>
                                 </button>
-                                <button
+                                <a
                                   type="button"
                                   rel="tooltip"
                                   title="Remove"
+                                  href="#"
+                                  onClick={() => this.handleDelete(data.id)}
                                   className="btn btn-white btn-link btn-sm"
                                 >
                                   <i className="material-icons">close</i>
-                                </button>
+                                </a>
                               </td>
                             </tr>
                             )

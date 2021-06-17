@@ -81,7 +81,7 @@ class AddProducts extends Component {
         this.setState({
           imageref: event.target.files[0],
           image: e.target.result,
-          productprep: { img: timestamp + "_" + filename },
+          productprep: { img: filename },
         });
       };
       reader.readAsDataURL(event.target.files[0]);
@@ -197,25 +197,7 @@ class AddProducts extends Component {
                             </label>
                           </div>
                         </div>
-                          <div className="row">
-                            <div className="col-md-12">
-                              <div className="form-group">
-                                <label>About Me</label>
-                                <div className="form-group">
-                                  <label className="bmd-label-floating">
-                                    {" "}
-                                    Lamborghini Mercy, Your chick she so
-                                    thirsty, I'm in that two seat Lambo.
-                                  </label>
-                                  <textarea
-                                    className="form-control"
-                                    rows={5}
-                                    defaultValue={""}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          
                           <button
                             type="submit"
                             className="btn btn-primary pull-right"
