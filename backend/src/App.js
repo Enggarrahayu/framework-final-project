@@ -17,7 +17,7 @@ class App extends Component {
           <Header/>
           <Switch>
                 <Route exact path="/" component={coba} /> 
-                <Route path="/productdata" component={ProductData} />   
+                <Route path="/userdata" component={ProductData} />   
                 <Route path="/addproducts" component={AddProducts} />   
           </Switch>
       </BrowserRouter>
